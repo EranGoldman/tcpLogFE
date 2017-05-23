@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1 Ben's best log server!
+  form#form
+    input#CommentInput(type='text')
+    input#addComment(type='submit', value='Send')
+  #future
+  table#dataTable
+    thead
+      tr
+        td
+        td created at
+        td source
+        td type
+        td message
+        td comment
+    tbody
+
+
+  script(src='/js/jquery-1.12.4.js')
+  script(src='/socket.io/socket.io.js')
+  script(src='/js/socketio.js')
+  script(src='/js/jquery.dataTables.min.js')
