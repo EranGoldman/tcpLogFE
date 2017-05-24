@@ -1,24 +1,33 @@
 extends layout
 
 block content
-  h1 Ben's best log server!
-  form#form
-    input#CommentInput(type='text')
-    input#addComment(type='submit', value='Send')
-  #future
-  table#dataTable
-    thead
-      tr
-        td
-        td created at
-        td source
-        td type
-        td message
-        td comment
-    tbody
+  .container-fluid
+  .row
+    .col-md-12
+      h1.text-center
+        | Ben's best log server!
+      .row
+        .col-md-4
+          .jumbotron
+            h2
+              | Your comment
+              input#CommentInput(type='text')
+            p
+              | Last TCP data :
+            #future
+            p
+              a.btn.btn-primary.btn-large#addComment(href='') Log
+        .col-md-8
+          table.table#dataTable
+            thead
+              tr
+                td created at
+                td source
+                td type
+                td message
+                td comment
+            tbody
 
-
-  script(src='/js/jquery-1.12.4.js')
-  script(src='/socket.io/socket.io.js')
-  script(src='/js/socketio.js')
+block js
   script(src='/js/jquery.dataTables.min.js')
+  script(src='/js/i.js?'+time)

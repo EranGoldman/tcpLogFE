@@ -35,7 +35,10 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(function(req,res,next){
+  app.locals.time = Date.now();
+  next();
+});
 app.use('/', routes);
 // app.use('/users', users);
 

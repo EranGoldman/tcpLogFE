@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 var app = require('../app');
-net = require('net');
+var net = require('net');
+var CronJob = require('cron').CronJob;
+
+var request = require('request');
+
+
 
 app.set('port', process.env.PORT || 3000);
 
@@ -10,9 +15,30 @@ var server = app.listen(app.get('port'), function() {
 
 app.io.attach(server);
 
+app.lastTCPCall = "";
+
 // tcp server
 net.createServer(function(socket){
   socket.on('data',function(data){
+    app.lastTCPCall = String(data);
     app.io.emit('messages', String(data));
   });
 }).listen(3001);
+
+new CronJob('0 */5 * * * *', function() {
+    var data = {};
+    data.source = 'server';
+    data.type = 'tcpLog';
+    data.message = app.lastTCPCall;
+    data.comment = Date.now();
+    request.post(
+        'http://localhost:9000/logs',
+        { json: data },
+        function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                console.log(body)
+            }
+        }
+    );
+    // $.post('localhost:9000',data,function(data){console.log(data)});
+}, null, true, 'America/Los_Angeles');
