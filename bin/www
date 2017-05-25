@@ -19,13 +19,16 @@ app.lastTCPCall = "";
 
 // tcp server
 net.createServer(function(socket){
+  socket.on('connect', function(data) {
+    socket.emit('messages', app.lastTCPCall);
+  });
   socket.on('data',function(data){
     app.lastTCPCall = String(data);
     app.io.emit('messages', String(data));
   });
 }).listen(3001);
 
-new CronJob('0 */5 * * * *', function() {
+new CronJob('0 * * * * *', function() {
     var data = {};
     data.source = 'server';
     data.type = 'tcpLog';
@@ -36,6 +39,7 @@ new CronJob('0 */5 * * * *', function() {
         { json: data },
         function (error, response, body) {
             if (!error && response.statusCode == 200) {
+                app.io.emit('update', app.lastTCPCall);
                 console.log(body)
             }
         }
