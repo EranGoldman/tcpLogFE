@@ -13,6 +13,7 @@ app.io = socket_io();
 app.io.on('connection', function(client) {
     console.log('Client connected...');
     console.log("Client id : " + client.id);
+    app.io.emit('messages', app.lastTCPCall);
   });
 
 var routes = require('./routes/index');

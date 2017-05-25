@@ -19,9 +19,6 @@ app.lastTCPCall = "";
 
 // tcp server
 net.createServer(function(socket){
-  socket.on('connect', function(data) {
-    socket.emit('messages', app.lastTCPCall);
-  });
   socket.on('data',function(data){
     app.lastTCPCall = String(data);
     app.io.emit('messages', String(data));
